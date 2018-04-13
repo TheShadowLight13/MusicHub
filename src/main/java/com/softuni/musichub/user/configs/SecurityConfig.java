@@ -2,6 +2,7 @@ package com.softuni.musichub.user.configs;
 
 import com.softuni.musichub.user.services.UserExtractionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,9 +16,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final int TOKEN_VALIDITY_SECONDS = 864_000;
 
+    private static final String DEV_ENVIRONMENT = "dev";
+
     private final UserExtractionService userExtractionService;
 
     private final BCryptPasswordEncoder passwordEncoder;
+
+    @Value("${spring.profiles.active}")
+    private String environment;
 
     @Autowired
     public SecurityConfig(UserExtractionService userExtractionService,
@@ -28,6 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        if (!this.environment.equals(DEV_ENVIRONMENT)) {
+            http.requiresChannel().anyRequest().requiresSecure();
+        }
+
         http.authorizeRequests()
                 .antMatchers("/bootstrap-4.0.0/**", "/css/**",
                         "/font-awesome/**", "/images/**",

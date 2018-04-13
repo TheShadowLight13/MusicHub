@@ -7,11 +7,12 @@ import com.softuni.musichub.user.exceptions.UserNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends BaseController{
+public class GlobalExceptionHandler extends BaseController {
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handleAllExceptions() {

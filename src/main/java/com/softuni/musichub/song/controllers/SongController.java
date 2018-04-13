@@ -43,13 +43,17 @@ public class SongController extends BaseController {
 
     private final SongExtractionService songExtractionService;
 
+    private final FileUtil fileUtil;
+
     @Autowired
     public SongController(CategoryExtractionService categoryExtractionService,
                           SongManipulationService songManipulationService,
-                          SongExtractionService songExtractionService) {
+                          SongExtractionService songExtractionService,
+                          FileUtil fileUtil) {
         this.categoryExtractionService = categoryExtractionService;
         this.songManipulationService = songManipulationService;
         this.songExtractionService = songExtractionService;
+        this.fileUtil = fileUtil;
     }
 
     private void saveSongInFileSystem(UploadSong uploadSong, FileUtil fileUtil)
@@ -85,8 +89,7 @@ public class SongController extends BaseController {
     public ModelAndView uploadSong(@Valid @ModelAttribute UploadSong uploadSong,
                                    BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes,
-                                   @AuthenticationPrincipal User user,
-                                   FileUtil fileUtil) throws IOException {
+                                   @AuthenticationPrincipal User user) throws IOException {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute(SongConstants.UPLOAD_SONG, uploadSong);
             String bindingResultKey = Constants.BINDING_RESULT_PACKAGE
